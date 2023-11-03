@@ -9,6 +9,6 @@ export const labelMapping: { [label: string]: number } = {
 export const reverseLabelsMapping: { [label: number]: string } = {
     0: 'No Focus',
     1: 'Low Focus',
-    2: 'Medium',
-    3: 'High'
+    2: 'Medium Focus',
+    3: 'High Focus '
 };

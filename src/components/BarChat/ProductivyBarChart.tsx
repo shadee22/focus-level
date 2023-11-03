@@ -5,27 +5,24 @@ import Legend from "../Legend";
 
 type BarChartData = number[];
 
-const initialData: BarChartData = [0, 0, 0, 0, 0, 0, 0, 0];
+const generateInitialData = (hours: number) => Array(hours).fill(0);
 
 const ProductivityBarChart: React.FC = () => {
     const chartRef: any = useRef(null);
-    let myChart: Chart | null = null; // Reference to the created chart
-    const [data, setData] = useState<BarChartData>(initialData);
-    const [selectedLabel, setSelectedLabel] = useState<number>(0);
+    let myChart: Chart | null = null;
+    const [hours, setHours] = useState<number>(10);
+    const [data, setData] = useState<BarChartData>(generateInitialData(hours));
+    const labels = Array.from({ length: hours }, (_, i) => (i + 1).toString());
 
     const handleDataChange = (index: number, value: number) => {
         const newData = [...data];
         newData[index] = value;
         setData(newData);
-        setSelectedLabel(value);
     };
-
 
     useEffect(() => {
         if (!chartRef.current) return;
 
-
-        // Register the required elements, controllers, and scales
         Chart.register(BarController, CategoryScale, LinearScale, BarElement, Tooltip);
 
         if (chartRef.current) {
@@ -39,9 +36,9 @@ const ProductivityBarChart: React.FC = () => {
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange','as','asa'],
+                    labels: labels,
                     datasets: [{
-                        label: '# of Votes',
+                        label: '# of Hours',
                         data: data,
                         borderWidth: 1,
                         borderRadius: 5,
@@ -77,17 +74,23 @@ const ProductivityBarChart: React.FC = () => {
                 myChart.destroy();
             }
         }
-    }, [data]);
+    }, [data, hours]);
 
     return (
         <div className='max-w-80 max-h-80'>
             <canvas ref={chartRef} />
-            <div className={`flex space-x-7 ml-12 mt-2`}>
+            <div className={`flex justify-between space-x-2 ml-8 mr-8 mt-2`}>
                 {data.map((value, index) => (
-                    <FocusSelection key={index} handleDataChange={handleDataChange} index={index} />
+                     <FocusSelection key={index} handleDataChange={handleDataChange} index={index} />
                 ))}
             </div>
-            <Legend/>
+            <div>
+                <div className="mb-4 flex mx-10 justify-between">
+                    <Legend/>
+
+                </div>
+            </div>
+
         </div>
     );
 }
