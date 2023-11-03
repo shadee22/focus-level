@@ -1,0 +1,24 @@
+# Node.js dependencies
+node_modules/
+
+# Compiled files
+build/
+dist/
+
+# Logs and debugging files
+.log
+.vscode/
+.idea/
+
+# Environment files (e.g., .env)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Output of npm or yarn
+npm-debug.log
+yarn-error.log
+
+# Editor-specific files
+.DS_Store
