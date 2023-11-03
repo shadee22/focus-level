@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "New Tab",
+  "version": "0.1.0",
+  "description": "Reminding your deathbed!!",
+  "icons": {
+    "32": "logo192.png",
+    "128": "logo512.png"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "tabs"
+  ]
+}
