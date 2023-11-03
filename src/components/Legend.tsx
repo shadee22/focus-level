@@ -1,5 +1,4 @@
 import {reverseLabelsMapping} from "./Utils";
-import {stringify} from "querystring";
 
 const Legend = () => {
     return (
@@ -9,7 +8,7 @@ const Legend = () => {
                 {
                     [1, 2, 3, 4].map((value: number, index:number) => {
                         return (
-                            <li className="flex items-center space-x-3 text-gray-400">
+                            <li key={index} className="flex items-center space-x-3 text-gray-400">
                                 <div
                                     className="bg-white text-black rounded-xl text-xs text-center h-7 w-7 flex
                                      items-center justify-center font-bold">

@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { labelMapping } from '../Utils';
+import {useSoundEffects} from "@/src/components/BarChat/PlaySound";
 
 type FocusSelectionProps = {
     handleDataChange: (index: number, value: number) => void;
     index: number;
+    reset: boolean;
 };
 
-const FocusSelection: React.FC<FocusSelectionProps> = ({ handleDataChange, index }) => {
+const FocusSelection: React.FC<FocusSelectionProps> = ({ handleDataChange, index, reset }) => {
     const [selectedLabel, setSelectedLabel] = useState(0);
 
     const handleSelectionChange = (index: number, value: number) => {
-
-
         setSelectedLabel(value);
         handleDataChange(index, value);
     };
+
+    useEffect(() => {
+        if (reset) {
+            // Reset your local states here...
+            setSelectedLabel(0);
+        }
+    }, [reset]);
+
 
     return (
             <main className={`grid space-y-2 w-full`}>
