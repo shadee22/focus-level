@@ -6,6 +6,7 @@ import Legend from "../Legend";
 import useChart from "./useChart";
 import Toast from "../../components/Toast";
 import {useSoundEffects} from "../BarChat/PlaySound";
+import Pomodoro from "../../components/Pomodoro";
 
 type BarChartData = number[];
 
@@ -13,13 +14,29 @@ const generateInitialData = (hours: number) => Array(hours).fill(0);
 
 const ProductivityBarChart: React.FC = () => {
 
+    const loadState = (key: any, defaultValue: any) => {
+        const stored = localStorage.getItem(key);
+        return stored !== null ? JSON.parse(stored) : defaultValue;
+    };
+
     const chartRef = useRef<any>(null);
-    const [hours, setHours] = useState<number>(10);
-    const [data, setData] = useState<BarChartData>(generateInitialData(hours));
-    const [hoursLabels, setHoursLabels] = useState<number[]>(generateInitialData(hours));
-    const [showToast, setShowToast] = useState(false);
-    const [sessionStartHour, setSessionStartHour] = useState<number | null>(null);
-    const [sessionStatus, setSessionStatus] = useState(false);
+    const [hours] = useState<number>(loadState('hours', 10));
+    const [data, setData] = useState<BarChartData>(loadState('data', generateInitialData(hours)));
+    const [hoursLabels, setHoursLabels] = useState<number[]>(loadState('hoursLabels', generateInitialData(hours)));
+    const [showToast, setShowToast] = useState(loadState('showToast', false));
+    const [sessionStartHour, setSessionStartHour] = useState<number | null>(loadState('sessionStartHour', null));
+    const [sessionStatus, setSessionStatus] = useState(loadState('sessionStatus', false));
+
+
+    useEffect(() => {
+        localStorage.setItem('hours', JSON.stringify(hours));
+        localStorage.setItem('data', JSON.stringify(data));
+        localStorage.setItem('hoursLabels', JSON.stringify(hoursLabels));
+        localStorage.setItem('showToast', JSON.stringify(showToast));
+        localStorage.setItem('sessionStartHour', JSON.stringify(sessionStartHour));
+        localStorage.setItem('sessionStatus', JSON.stringify(sessionStatus));
+    }, [hours, data, hoursLabels, showToast, sessionStartHour, sessionStatus]);
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -120,8 +137,9 @@ const ProductivityBarChart: React.FC = () => {
                 ))}
 
             </div >
-            <div className="mb-4 flex mx-10 justify-between">
+            <div className="mb-4 flex mx-10 ">
                 <Legend/>
+                <Pomodoro/>
             </div>
         </div>
     );
