@@ -10,9 +10,6 @@ const App: React.FC = () => {
                 <div className={`absolute inset-0 bg-[url(/public/noise.svg)] opacity-25 brightness-100 contrast-150`}/>
             </div>
             <div className="max-w-screen-md container relative mx-auto h-screen  p-12">
-                <h1 className="text-3xl p-4 font-bold text-white">
-                    Focus Level
-                </h1>
 
                 <div className='max-w-40 max-h-40 '>
                     <ProductivityBarChart/>

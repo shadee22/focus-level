@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 
 import FocusSelection from './FocusSelection';
@@ -7,6 +7,7 @@ import useChart from "./useChart";
 import Toast from "../../components/Toast";
 import {useSoundEffects} from "../BarChat/PlaySound";
 import Pomodoro from "../../components/Pomodoro";
+import {convertTo12HourFormat} from "../../components/Utils";
 
 type BarChartData = number[];
 
@@ -78,7 +79,13 @@ const ProductivityBarChart: React.FC = () => {
     const handleStart = () => {
         const currentHour = new Date().getHours();
         setSessionStartHour(currentHour)
-        const newLabels = Array.from({length: 10}, (_, idx) => (currentHour + idx) % 24);
+        // const newLabels = Array.from({length: 10}, (_, idx) => (currentHour + idx) % 24);
+        // Create an array of 12-hour time labels
+        // Create an array of 12-hour time labels as numbers
+        const newLabels = Array.from({ length: 10 }, (_, idx) => {
+            const hour24 = (currentHour + idx) % 24;
+            return hour24 === 0 ? 12 : hour24 <= 12 ? hour24 : hour24 - 12; // Convert the hour to a number
+        });
         setHoursLabels(newLabels);
         playSound();
         setShowToast(true);
@@ -106,19 +113,29 @@ const ProductivityBarChart: React.FC = () => {
         if (!sessionStatus) {
             return (
                 <button
-                    className={`bg-white/80 h-fit px-8 py-2 rounded-xl text-2xl border-2 border-black font-bold text-black hover:bg-white hover:outline transition-all`}
+                    className={`h-fit p-4 text-lg
+                    bg-gradient-to-b from-white/40 text-white  to-white/20
+                     py-2 rounded-xl  font-bold  font-thin hover:outline outline-gray-800  transition-all`}
                     onClick={handleStart}
                 >
                     Start Session Now
                 </button>
             );
         } else {
+            let convertedTime = convertTo12HourFormat(sessionStartHour+":00")
+
             return (
                 <button
-                    className={`bg-white/80 h-fit px-8 py-2 rounded-xl text-2xl border-2 border-black font-bold text-black hover:bg-white hover:outline transition-all`}
+                    className={` h-fit p-4 text-lg
+                    bg-gradient-to-b from-white/40 text-white  to-white/20
+                     py-2 rounded-xl  font-bold  font-thin hover:outline outline-gray-800  transition-all`}
                     onClick={handleStop}
                 >
-                    Stop Session {sessionStartHour}
+                    <p className={`font-light`}>
+                        Stop Session of
+
+                        <span className={`font-medium`}>{" "}{convertedTime.time}{" "}{convertedTime.am_pm}</span>
+                    </p>
                 </button>
             );
         }
@@ -127,7 +144,10 @@ const ProductivityBarChart: React.FC = () => {
     return (
         <div className='max-w-80 max-h-80'>
             {showToast && <Toast message={`Session Started at ${sessionStartHour}`} />}
-            <div className={`flex justify-center mb-8`}>
+            <div className={`flex justify-between mb-8 items-center `}>
+                <h1 className="text-3xl   font-bold text-white">
+                    Focus Level
+                </h1>
                 {renderSessionButton()}
             </div>
             <canvas className={`text-white`} ref={chartRef}/>
