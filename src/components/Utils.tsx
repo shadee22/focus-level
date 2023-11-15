@@ -27,6 +27,27 @@ export  const getColorForBar = (value: number): string => {
     }
 };
 
+export const playSound = () => {
+    // Define an array of audio file paths
+    const audioFiles = ['/zte_ripple.mp3', '/lil_hi.mp3', '/oye_girl_voice.mp3'];
+
+    // Get a random index within the range of audioFiles array
+    const randomIndex = Math.floor(Math.random() * audioFiles.length);
+
+    // Create an Audio object with the selected audio file
+    const audio = new Audio(audioFiles[randomIndex]);
+
+    // Play the selected audio
+    audio.play();
+};
+export const playStartStopSound = () => {
+    // Define an array of audio file paths
+    const audioFile = '/bing.mp3'
+    // Create an Audio object with the selected audio file
+    const audio = new Audio(audioFile);
+    // Play the selected audio
+    audio.play();
+};
 
 export  const  convertTo12HourFormat = (time24Hour: any) =>  {
     // Validate input using a regular expression to match the format HH:MM

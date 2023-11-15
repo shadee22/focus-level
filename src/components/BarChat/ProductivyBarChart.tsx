@@ -7,7 +7,7 @@ import useChart from "./useChart";
 import Toast from "../../components/Toast";
 import {useSoundEffects} from "../BarChat/PlaySound";
 import Pomodoro from "../../components/Pomodoro";
-import {convertTo12HourFormat} from "../../components/Utils";
+import {convertTo12HourFormat, playSound, playStartStopSound} from "../../components/Utils";
 
 type BarChartData = number[];
 
@@ -40,29 +40,6 @@ const ProductivityBarChart: React.FC = () => {
 
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const currentHour = new Date().getHours();
-            setSessionStartHour(currentHour);
-        }, 500);
-
-        return () => clearInterval(interval);
-    }, [sessionStartHour]);
-
-
-    const playSound = () => {
-        // Define an array of audio file paths
-        const audioFiles = ['/zte_ripple.mp3', '/lil_hi.mp3', '/oye_girl_voice.mp3'];
-
-        // Get a random index within the range of audioFiles array
-        const randomIndex = Math.floor(Math.random() * audioFiles.length);
-
-        // Create an Audio object with the selected audio file
-        const audio = new Audio(audioFiles[randomIndex]);
-
-        // Play the selected audio
-        audio.play();
-    };
-    useEffect(() => {
         const checkHourly = () => {
             const currentMinute = new Date().getMinutes();
             if (currentMinute === 0 && sessionStatus) {
@@ -75,31 +52,31 @@ const ProductivityBarChart: React.FC = () => {
         return () => clearInterval(hourlySoundInterval);
     }, []);
 
-
     const handleStart = () => {
         const currentHour = new Date().getHours();
-        setSessionStartHour(currentHour)
-        // const newLabels = Array.from({length: 10}, (_, idx) => (currentHour + idx) % 24);
-        // Create an array of 12-hour time labels
+        setSessionStartHour(currentHour);
+
         // Create an array of 12-hour time labels as numbers
         const newLabels = Array.from({ length: 10 }, (_, idx) => {
             const hour24 = (currentHour + idx) % 24;
             return hour24 === 0 ? 12 : hour24 <= 12 ? hour24 : hour24 - 12; // Convert the hour to a number
         });
+
         setHoursLabels(newLabels);
         playSound();
         setShowToast(true);
-        setSessionStatus(true)
-        setTimeout(()=>{
-            setShowToast(false)
-        },4000)
+        setSessionStatus(true);
+
+        // Automatically hide the toast after 4 seconds
+        setTimeout(() => setShowToast(false), 4000);
     };
 
-    const handleStop = ()=> {
-        setSessionStatus(false)
-        setData(generateInitialData(hours));  // Reset the data to its initial value
+    const handleStop = () => {
+        setSessionStatus(false);
+        setData(generateInitialData(hours)); // Reset the data to its initial value
+    };
 
-    }
+
     const handleDataChange = (index: number, value: number) => {
         const newData = [...data];
         newData[index] = value;
@@ -146,21 +123,22 @@ const ProductivityBarChart: React.FC = () => {
             {showToast && <Toast message={`Session Started at ${sessionStartHour}`} />}
             <div className={`flex justify-between mb-8 items-center `}>
                 <h1 className="text-3xl   font-bold text-white">
-                    Focus Level
+                    Level
                 </h1>
                 {renderSessionButton()}
             </div>
-            <canvas className={`text-white`} ref={chartRef}/>
+            <div className="mb-4 flex mx-10 ">
+                {/*<Legend/>*/}
+                <Pomodoro/>
+            </div>
+            <canvas className={`text-white `} ref={chartRef}/>
             <div className={`flex justify-between space-x-2 ml-8 mr-8 mt-2`}>
                 {data.map((value, index) => (
                     <FocusSelection key={index} handleDataChange={handleDataChange} index={index} reset={!sessionStatus}/>
                 ))}
 
             </div >
-            <div className="mb-4 flex mx-10 ">
-                <Legend/>
-                <Pomodoro/>
-            </div>
+
         </div>
     );
 };
