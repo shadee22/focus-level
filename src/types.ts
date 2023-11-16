@@ -9,3 +9,8 @@ export interface TimerButtonProps {
     label: string;
     onClick: () => void;
 }
+export type FocusSelectionProps = {
+    handleDataChange: (index: number, value: number) => void;
+    index: number;
+    reset: boolean;
+};

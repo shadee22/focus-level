@@ -1,13 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 
 
-import FocusSelection from './FocusSelection';
-import Legend from "../Legend";
 import useChart from "./useChart";
 import Toast from "../../components/Toast";
 import {useSoundEffects} from "../BarChat/PlaySound";
 import Pomodoro from "../../components/Pomodoro";
 import {convertTo12HourFormat, playSound, playStartStopSound} from "../../components/Utils";
+import FocusSelection from "./../BarChat/FocusSelection";
 
 type BarChartData = number[];
 
@@ -131,8 +130,8 @@ const ProductivityBarChart: React.FC = () => {
                 {/*<Legend/>*/}
                 <Pomodoro/>
             </div>
-            <canvas className={`text-white `} ref={chartRef}/>
-            <div className={`flex justify-between space-x-2 ml-8 mr-8 mt-2`}>
+            {/*<canvas className={`text-white `} ref={chartRef}/>*/}
+            <div className={`flex justify-between space-x-2 ml-8 mr-8 mt-12`}>
                 {data.map((value, index) => (
                     <FocusSelection key={index} handleDataChange={handleDataChange} index={index} reset={!sessionStatus}/>
                 ))}

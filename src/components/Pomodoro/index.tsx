@@ -21,7 +21,7 @@ const Pomodoro: React.FC = () => {
     const seconds = timeLeft % 60;
 
     return (
-        <div className="max-w-sm mx-auto p-6 rounded-2xl shadow-lg flex flex-col items-center">
+        <div className="mx-auto flex max-w-sm flex-col items-center backdrop-blur-sm bg-black/20 rounded-2xl p-6 shadow-lg">
             <div className="flex mb-4">
         <span
             className={`cursor-pointer px-4 py-2 ${isPomodoro ? 'text-white/80 font-semibold' : 'text-white/50'}`}
@@ -36,8 +36,8 @@ const Pomodoro: React.FC = () => {
           Short Break
         </span>
             </div>
-            <TimerDisplay minutes={minutes} seconds={seconds} />
-            <TimerButton label={isActive ? 'PAUSE' : 'START'} onClick={toggleTimer} />
+            <TimerDisplay minutes={minutes} seconds={seconds}/>
+            <TimerButton label={isActive ? 'PAUSE' : 'START'} onClick={toggleTimer}/>
         </div>
     );
 };

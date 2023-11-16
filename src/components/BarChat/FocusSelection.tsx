@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { labelMapping } from '../Utils';
+import {getClassName} from "./FocusSelectionUtils";
 
 type FocusSelectionProps = {
     handleDataChange: (index: number, value: number) => void;
@@ -8,24 +9,19 @@ type FocusSelectionProps = {
 };
 
 const FocusSelection: React.FC<FocusSelectionProps> = ({ handleDataChange, index, reset }) => {
-    // Define a key to save to localStorage based on the index to ensure each FocusSelection has a unique key
     const localStorageKey: string = `selectedLabel-${index}`;
-
-    // Initialize state from localStorage or default to 0 if not found
     const [selectedLabel, setSelectedLabel] = useState<number>(
         () => JSON.parse(localStorage.getItem(localStorageKey) as string) || 0
     );
 
-    // Whenever the selectedLabel changes, save it to localStorage
     useEffect(() => {
         localStorage.setItem(localStorageKey, JSON.stringify(selectedLabel));
     }, [selectedLabel, localStorageKey]);
 
-    // Reset handler
     useEffect(() => {
         if (reset) {
-            setSelectedLabel(0); // reset to initial value
-            localStorage.removeItem(localStorageKey); // remove from localStorage as well
+            setSelectedLabel(0);
+            localStorage.removeItem(localStorageKey);
         }
     }, [reset, localStorageKey]);
 
@@ -34,15 +30,17 @@ const FocusSelection: React.FC<FocusSelectionProps> = ({ handleDataChange, index
         handleDataChange(index, value);
     };
 
+
+    const labels = ['high', 'medium', 'low', 'none'];
+
     return (
-        <main className={`grid space-y-2 w-full`}>
-            {['high', 'medium', 'low', 'none'].map((label: string, idx: number) => (
+        <main className={`grid w-full`}>
+            {labels.map((label: string, idx: number) => (
                 <div
                     key={idx}
                     onClick={() => handleSelectionChange(index, labelMapping[label])}
                     onDoubleClick={() => handleSelectionChange(index, labelMapping['none'])}
-                    className={`w-full h-10 flex items-center justify-center  cursor-pointer font-semibold transition-all rounded-2xl
-                     ${selectedLabel === labelMapping[label] ? 'bg-white text-black ' : 'bg-white/20 hover:bg-white/70'}`}
+                    className={getClassName(labelMapping[label], idx, labels.length, selectedLabel)}
                 >
                     {`${labelMapping[label]}`}
                 </div>
